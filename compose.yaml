@@ -1,0 +1,11 @@
+name: news-api
+services:
+  postgres:
+    image: 'postgres:15.3'
+    container_name: 'database'
+    environment:
+      - 'POSTGRES_DB=news'
+      - 'POSTGRES_PASSWORD=admin'
+      - 'POSTGRES_USER=admin123'
+    ports:
+      - '5432:5432'

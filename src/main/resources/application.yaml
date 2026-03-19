@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ms-news
+
+springdoc:
+  default-consumes-media-type: 'application/json'
+  default-produces-media-type: 'application/json'
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+web-service-news:
+  api:
+    base-url: https://newsapi.org/v2
+    key: ${NEWS_API_KEY}
