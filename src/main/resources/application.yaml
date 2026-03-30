@@ -4,6 +4,20 @@ server:
 spring:
   application:
     name: ms-news
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      timeout: 5000
+#      password: ${REDIS_PASSWORD}
+  cache:
+    type: redis
+    cache-names: "top-headlines,everything-news,sources"
+    redis:
+      time-to-live: 24h
+      key-prefix: "ms-news::"
+      use-key-prefix: true
+      cache-null-values: true
 
 springdoc:
   default-consumes-media-type: 'application/json'

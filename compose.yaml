@@ -9,3 +9,34 @@ services:
       - 'POSTGRES_USER=admin123'
     ports:
       - '5432:5432'
+
+  redis:
+    image: redis:8.0
+    container_name: redis
+    ports:
+      - '6379:6379'
+#    volumes:
+#      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
+#  microservice:
+#    #build: .
+#    image: ms-news-img:1.0.0
+#    container_name: ms-news
+#    ports:
+#      - "8080:8080"
+#    depends_on: redis
+#    environment:
+#      - 'REDIS_HOST=redis'
+#      - 'REDIS_PORT=6379'
+#    entrypoint: ["java","-jar","app.jar"]
+
+# Move to the directory
+# cd C:/Projects/News/ms-news
+
+# Build and run the containers
+# docker compose up -d
+
+# To stop and remove the containers
+# docker compose down
+

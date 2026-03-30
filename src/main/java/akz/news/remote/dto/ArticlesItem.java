@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticlesItem {
+public class ArticlesItem implements Serializable {
 	private String publishedAt;
 	private String author;
 	private String urlToImage;

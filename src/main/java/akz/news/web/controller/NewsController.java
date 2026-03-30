@@ -69,10 +69,10 @@ public class NewsController {
       @RequestParam(required = false) String page
   ) {
     return ResponseEntity.ok(service.getTopHeadlines(
-        Util.buildMapParameters(query, sources, country, category, pageSize, page)));
+        Util.buildMapParameters(country, category, sources, query, pageSize, page)));
   }
 
-  @GetMapping("top-headlines/source")
+  @GetMapping("top-headlines/sources")
   public ResponseEntity<SourceResponse> getSources(
       @Schema(example = "entertainment", description = DocumentationConstants.CATEGORY_SOURCE_PARAMETER_DESCRIPTION)
       @RequestParam(required = false) String category,

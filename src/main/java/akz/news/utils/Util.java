@@ -2,6 +2,7 @@ package akz.news.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,6 +67,17 @@ public final class Util {
     if (StringUtils.isNotBlank(query)) params.put("query", query);
     if (StringUtils.isNotBlank(pageSize)) params.put("pageSize", pageSize);
     if (StringUtils.isNotBlank(page)) params.put("page", page);
+  }
+
+  public static Duration getTimeToLive(String timeToLive) {
+    String durationType = timeToLive.substring(timeToLive.length() - 1);
+    int time = Integer.parseInt(timeToLive.substring(0, timeToLive.length() - 1));
+    return switch (durationType) {
+      case "d" -> Duration.ofDays(time);
+      case "h" -> Duration.ofHours(time);
+      case "m" -> Duration.ofMinutes(time);
+      default -> Duration.ofSeconds(time);
+    };
   }
 
   private Util() {
