@@ -1,6 +1,9 @@
 package akz.news.utils;
 
+import akz.news.exception.CustomException;
+import akz.news.utils.enums.EError;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -15,7 +18,7 @@ public final class Util {
 
     if (StringUtils.isBlank(query) && StringUtils.isBlank(searchIn)
         && StringUtils.isBlank(sources) && StringUtils.isBlank(domains)) {
-      throw new IllegalArgumentException("At least one of the following parameters must be provided: query, sources, domains.");
+      throw new CustomException(HttpStatus.BAD_REQUEST, EError.REQUIRED_PARAM_EVERYTHING);
     }
 
     Map<String, String> params = new HashMap<>();
@@ -38,7 +41,7 @@ public final class Util {
 
     if (StringUtils.isBlank(country) && StringUtils.isBlank(category)
         && StringUtils.isBlank(sources) && StringUtils.isBlank(query)) {
-      throw new IllegalArgumentException("At least one of the following parameters must be provided: country, category, sources, query.");
+      throw new CustomException(HttpStatus.BAD_REQUEST, EError.REQUIRED_PARAM_TOP_HEADLINE);
     }
 
     Map<String, String> params = new HashMap<>();
@@ -81,6 +84,6 @@ public final class Util {
   }
 
   private Util() {
-    throw new UnsupportedOperationException("Utility class");
+    throw new CustomException(EError.UTILITY_CLASS);
   }
 }

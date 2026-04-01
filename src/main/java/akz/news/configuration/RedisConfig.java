@@ -13,8 +13,6 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-import java.time.Duration;
-
 @Slf4j
 @EnableCaching
 @Configuration

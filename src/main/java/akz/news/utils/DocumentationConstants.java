@@ -1,5 +1,8 @@
 package akz.news.utils;
 
+import akz.news.exception.CustomException;
+import akz.news.utils.enums.EError;
+
 public final class DocumentationConstants {
 
   public static final String USER_AGENT = "User-Agent";
@@ -134,6 +137,6 @@ public final class DocumentationConstants {
   """;
 
   private DocumentationConstants() {
-    throw new UnsupportedOperationException("Utility class");
+    throw new CustomException(EError.UTILITY_CLASS);
   }
 }
