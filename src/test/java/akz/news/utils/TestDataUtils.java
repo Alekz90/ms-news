@@ -8,9 +8,9 @@ import akz.news.utils.enums.EError;
 
 import java.util.List;
 
-public final class TestDataUtils {
+import static akz.news.utils.Constants.SUCCESS_OK_RESPONSE;
 
-  public static final String SUCCESS_OK_RESPONSE = "ok";
+public final class TestDataUtils {
 
   public static final EverythingResponse SUCCESS_EVERYTHING_RESPONSE
       = fillSuccessEverythingResponse();

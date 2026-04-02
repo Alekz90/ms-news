@@ -31,3 +31,15 @@ web-service-news:
   api:
     base-url: https://newsapi.org/v2
     key: ${NEWS_API_KEY}
+
+logging:
+  level:
+    root: INFO
+#    org.springframework.web: DEBUG
+    org.springframework.web: ERROR
+    org.hibernate: WARN
+    io.github.resilience4j: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/app.log

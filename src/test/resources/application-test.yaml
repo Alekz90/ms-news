@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ms-news
+
+logging:
+  level:
+#    root: ERROR
+    root: INFO
+    org.springframework.boot.test: WARN
+    io.github.resilience4j: ERROR
+  pattern:
+    console: "%d{HH:mm:ss} %-5level %msg%n"
+
