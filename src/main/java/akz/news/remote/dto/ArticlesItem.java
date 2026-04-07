@@ -12,6 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticlesItem implements Serializable {
+
 	private String publishedAt;
 	private String author;
 	private String urlToImage;

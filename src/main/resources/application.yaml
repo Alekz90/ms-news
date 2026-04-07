@@ -18,6 +18,18 @@ spring:
       key-prefix: "ms-news::"
       use-key-prefix: true
       cache-null-values: true
+  cloud:
+    circuitbreaker:
+      resilience4j:
+        instances:
+          news-instance:
+            slidingWindowSize: 10
+            failureRateThreshold: 50
+            waitDurationInOpenState: 30000
+            automaticTransitionFromOpenToHalfOpenEnabled: true
+            permittedNumberOfCallsInHalfOpenState: 5
+            allowHealthIndicatorToFail: true
+            registerHealthIndicator: true
 
 springdoc:
   default-consumes-media-type: 'application/json'
@@ -29,8 +41,26 @@ springdoc:
 
 web-service-news:
   api:
-    base-url: https://newsapi.org/v2
+    base-url: https://newsapi.org/v2/
+#    base-url: http://localhost:8081
     key: ${NEWS_API_KEY}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      news-instance:
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30000
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 5
+        allowHealthIndicatorToFail: true
+        registerHealthIndicator: true
+
+# closed -UP
+# open -DOWN
+# half open - UNKNOWN
 
 logging:
   level:

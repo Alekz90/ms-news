@@ -1,17 +1,22 @@
 package akz.news.remote.dto;
 
-import lombok.NoArgsConstructor;
+import akz.news.utils.Constants;
+import lombok.Builder;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-public class TopHeadlineResponse extends EverythingResponse {
+public class TopHeadlineResponse extends AbstractNewsResponse {
 
-  public TopHeadlineResponse(int totalResults, List<ArticlesItem> articles, String status, String message) {
-    super(totalResults, articles, status, message);
+  @Builder
+  public TopHeadlineResponse(int totalResults, List<ArticlesItem> articles, String status, String code, String message) {
+    super(totalResults, articles, status, code, message);
   }
 
   public static TopHeadlineResponse error(String message) {
-    return new TopHeadlineResponse(0, List.of(), "error", message);
+    return TopHeadlineResponse.builder()
+      .status(Constants.ERROR_STATUS_RESPONSE)
+      .message(message)
+      .build();
   }
 }

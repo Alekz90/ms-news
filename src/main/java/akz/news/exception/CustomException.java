@@ -31,6 +31,12 @@ public class CustomException extends RuntimeException {
     this.id = errorEnum.getId();
   }
 
+  public CustomException(String message) {
+    super(message);
+    this.status = HttpStatus.INTERNAL_SERVER_ERROR;
+    this.id = EError.GENERAL_MESSAGE.getId();
+  }
+
   /**
    * Constructs a new CustomCommonException with the specified error enum and a default HTTP status of INTERNAL_SERVER_ERROR.
    * @param errorEnum the error enum containing the message and ID
@@ -45,4 +51,5 @@ public class CustomException extends RuntimeException {
   public CustomException() {
     this(HttpStatus.INTERNAL_SERVER_ERROR, EError.GENERAL_MESSAGE);
   }
+
 }

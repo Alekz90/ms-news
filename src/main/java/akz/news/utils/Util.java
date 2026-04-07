@@ -18,7 +18,7 @@ public final class Util {
 
     if (StringUtils.isBlank(query) && StringUtils.isBlank(searchIn)
         && StringUtils.isBlank(sources) && StringUtils.isBlank(domains)) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, EError.REQUIRED_PARAM_EVERYTHING);
+      //throw new CustomException(HttpStatus.BAD_REQUEST, EError.REQUIRED_PARAM_EVERYTHING);
     }
 
     Map<String, String> params = new HashMap<>();
@@ -41,7 +41,7 @@ public final class Util {
 
     if (StringUtils.isBlank(country) && StringUtils.isBlank(category)
         && StringUtils.isBlank(sources) && StringUtils.isBlank(query)) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, EError.REQUIRED_PARAM_TOP_HEADLINE);
+      //throw new CustomException(HttpStatus.BAD_REQUEST, EError.REQUIRED_PARAM_TOP_HEADLINE);
     }
 
     Map<String, String> params = new HashMap<>();

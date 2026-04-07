@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum EError {
 
+  TESTING_MESSAGE             ("0000", "This error is only used for testing."),
   GENERAL_MESSAGE             ("0001", "An error has been happened during the process."),
   UTILITY_CLASS               ("0002", "This class isn't allowed to create any instances."),
   BAD_REQUEST                 ("0003", "An error occurred while processing the request."),

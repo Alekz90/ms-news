@@ -10,7 +10,8 @@ public final class Constants {
   public static final String CACHING_SOURCES = "sources";
   public static final String TEST_PROFILE = "test";
   public static final String NOT_TEST_PROFILE = "!test";
-  public static final String SUCCESS_OK_RESPONSE = "ok";
+  public static final String SUCCESS_STATUS_RESPONSE = "ok";
+  public static final String ERROR_STATUS_RESPONSE = "error";
 
   private Constants() {
     throw new CustomException(EError.UTILITY_CLASS);
