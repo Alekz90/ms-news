@@ -2,9 +2,13 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: ms-news
   cloud:
     circuitbreaker:
       enabled: true
+      micrometer:
+        enabled: true
       resilience4j:
         instances:
           news-instance:
@@ -15,8 +19,6 @@ spring:
             permittedNumberOfCallsInHalfOpenState: 5
             allowHealthIndicatorToFail: true
             registerHealthIndicator: true
-  application:
-    name: ms-news
   data:
     redis:
       host: ${REDIS_HOST}
@@ -63,6 +65,9 @@ management:
     web:
       exposure:
         include: health, metrics, prometheus
+  metrics:
+    tags:
+      application: ms-news
 
 # closed -UP
 # open -DOWN
