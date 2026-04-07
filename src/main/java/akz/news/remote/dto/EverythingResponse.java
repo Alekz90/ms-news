@@ -2,10 +2,12 @@ package akz.news.remote.dto;
 
 import akz.news.utils.Constants;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
 public class EverythingResponse extends AbstractNewsResponse {
 
   @Builder

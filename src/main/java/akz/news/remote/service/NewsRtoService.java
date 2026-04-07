@@ -38,11 +38,7 @@ public class NewsRtoService {
   @CircuitBreaker(name = NEWS_INSTANCE, fallbackMethod = "failGetTopHeadlines")
   public TopHeadlineResponse getTopHeadlines(Map<String, String> params) {
     log.info("Get Top Headlines news Key: {}", String.join(";", params.values()));
-    try {
-      return repository.getTopHeadlines(TopHeadlineParamDto.fromMap(params));
-    } catch (Throwable e) {
-      return TopHeadlineResponse.error(e.getMessage());
-    }
+    return repository.getTopHeadlines(TopHeadlineParamDto.fromMap(params));
   }
 
   public TopHeadlineResponse failGetTopHeadlines(Map<String, String> params, Throwable ex) {
