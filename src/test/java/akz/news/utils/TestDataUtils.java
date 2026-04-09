@@ -1,10 +1,15 @@
 package akz.news.utils;
 
-import akz.news.exception.CustomException;
 import akz.news.remote.dto.*;
-import akz.news.utils.enums.EError;
+import akz.news.web.dto.REverythingResponse;
+import akz.news.web.dto.RSourcesResponse;
+import akz.news.web.dto.RTopHeadlinesResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.Map;
 
 import static akz.news.utils.Constants.SUCCESS_STATUS_RESPONSE;
 
@@ -13,11 +18,17 @@ public final class TestDataUtils {
   public static final EverythingResponse SUCCESS_EVERYTHING_RESPONSE = fillSuccessEverythingResponse();
   public static final TopHeadlineResponse SUCCESS_TOP_HEADLINES_RESPONSE = fillSuccessHeadlinesResponse();
   public static final SourceResponse SUCCESS_SOURCES_RESPONSE = fillSourcesResponse();
-  public static final SourceResponse ERROR_SOURCES_RESPONSE = SourceResponse.error(EError.TESTING_MESSAGE.getMessage());
-
-  private TestDataUtils() {
-    throw new CustomException(EError.UTILITY_CLASS);
-  }
+  public static final REverythingResponse SUCCESS_RECORD_EVERYTHING_RESPONSE = fillREverythingResponse();
+  public static final RTopHeadlinesResponse SUCCESS_RECORD_TOP_HEADLINES_RESPONSE = fillRTopHeadlinesResponse();
+  public static final RSourcesResponse SUCCESS_RECORD_SOURCES_RESPONSE = fillRSourcesResponse();
+  public static final Map<HttpStatus, ResultMatcher> MAP_STATUS_MATCHER = Map.of(
+    HttpStatus.NOT_FOUND, MockMvcResultMatchers.status().isNotFound(),
+    HttpStatus.BAD_REQUEST, MockMvcResultMatchers.status().isBadRequest(),
+    HttpStatus.CONFLICT, MockMvcResultMatchers.status().isConflict(),
+    HttpStatus.CREATED, MockMvcResultMatchers.status().isCreated(),
+    HttpStatus.OK, MockMvcResultMatchers.status().isOk(),
+    HttpStatus.INTERNAL_SERVER_ERROR, MockMvcResultMatchers.status().isInternalServerError()
+  );
 
   private static EverythingResponse fillSuccessEverythingResponse() {
     return EverythingResponse.builder()
@@ -129,5 +140,17 @@ public final class TestDataUtils {
             .build()
         )
       ).build();
+  }
+
+  private static REverythingResponse fillREverythingResponse() {
+    return new REverythingResponse(SUCCESS_EVERYTHING_RESPONSE.getTotalResults(), SUCCESS_EVERYTHING_RESPONSE.getArticles());
+  }
+
+  private static RTopHeadlinesResponse fillRTopHeadlinesResponse() {
+    return new RTopHeadlinesResponse(SUCCESS_TOP_HEADLINES_RESPONSE.getTotalResults(), SUCCESS_TOP_HEADLINES_RESPONSE.getArticles());
+  }
+
+  private static RSourcesResponse fillRSourcesResponse() {
+    return new RSourcesResponse(SUCCESS_SOURCES_RESPONSE.getSources());
   }
 }

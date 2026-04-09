@@ -1,23 +1,24 @@
 package akz.news.remote.dto;
 
-import lombok.AllArgsConstructor;
+import akz.news.remote.dto.abstracts.AbstractErrorResponse;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
 
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class SourceResponse implements Serializable {
-	private List<Source> sources;
-	private String status;
-  private String message;
+public class SourceResponse extends AbstractErrorResponse implements Serializable {
 
-  public static SourceResponse error(String message) {
-    return new SourceResponse(List.of(), "error", message);
+	private List<Source> sources;
+
+  @Builder
+  public SourceResponse(String status, String message, List<Source> sources) {
+    super(status, message);
+    this.sources = sources;
   }
 }

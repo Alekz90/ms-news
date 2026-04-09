@@ -1,9 +1,8 @@
 package akz.news.utils;
 
-import akz.news.exception.CustomException;
-import akz.news.utils.enums.EError;
-
 public final class DocumentationConstants {
+
+  private DocumentationConstants() {}
 
   public static final String USER_AGENT = "User-Agent";
   public static final String USER_AGENT_VALUE = "NewsApp/1.0 (alejdaf@outlook.com)";
@@ -135,8 +134,4 @@ public final class DocumentationConstants {
      | ng | nl | no | nz | ph | pl | pt | ro | rs | ru | sa | se | sg | si | sk | th | tr | tw | ua | us | ve | za.<br>
      Default: all countries.
   """;
-
-  private DocumentationConstants() {
-    throw new CustomException(EError.UTILITY_CLASS);
-  }
 }

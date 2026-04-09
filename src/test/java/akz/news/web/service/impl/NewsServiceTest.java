@@ -1,28 +1,25 @@
 package akz.news.web.service.impl;
 
 import akz.news.exception.CustomException;
-import akz.news.remote.dto.AbstractNewsResponse;
-import akz.news.remote.dto.EverythingResponse;
-import akz.news.remote.dto.SourceResponse;
-import akz.news.remote.dto.TopHeadlineResponse;
 import akz.news.remote.repository.INewsRtoRepository;
 import akz.news.utils.enums.EError;
+import akz.news.web.dto.REverythingResponse;
+import akz.news.web.dto.RSourcesResponse;
+import akz.news.web.dto.RTopHeadlinesResponse;
 import akz.news.web.service.INewsService;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.Map;
 
-import static akz.news.utils.Constants.*;
+import static akz.news.utils.Constants.TEST_PROFILE;
 import static akz.news.utils.TestDataUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,9 +37,6 @@ class NewsServiceTest {
   @Autowired
   private INewsService service;
 
-  @BeforeEach
-  void setUp() {}
-
   @AfterEach
   void tearDown() {
     reset(repositoryMock);
@@ -51,60 +45,57 @@ class NewsServiceTest {
   @Test
   @DisplayName("Get all news")
   void getEverything() {
+    Map<String, String> params = Map.of("query", "bitcoin");
+
     when(repositoryMock.getEverything(any())).thenReturn(SUCCESS_EVERYTHING_RESPONSE);
+    REverythingResponse successResponse = service.getEverything(params);
+    assertAll("Success Everything news assertions",
+      () -> assertNotNull(successResponse, "The response can't be null"),
+      () -> assertNotNull(successResponse.articles(), "The articles can't be null"),
+      () -> assertEquals(2, successResponse.articles().size(), "The first article isn't correct"),
+      () -> assertEquals(SUCCESS_EVERYTHING_RESPONSE.getArticles().getFirst(), successResponse.articles().getFirst(), "The size of articles isn't correct")
+    );
 
-    EverythingResponse successResponse = service.getEverything(Map.of("query", "bitcoin"));
+    when(repositoryMock.getEverything(any())).thenThrow(new RuntimeException(EError.TESTING_MESSAGE.getMessage()));
+    assertThrows(CustomException.class, () -> service.getEverything(params));
 
-    validateCommonAssertions("Success Everything news assertions", successResponse);
-
-    verify(repositoryMock).getEverything(any());
+    verify(repositoryMock, times(2)).getEverything(any());
   }
 
   @Test
   void getTopHeadlines() {
+    Map<String, String> params = Map.of("country", "US");
+
     when(repositoryMock.getTopHeadlines(any())).thenReturn(SUCCESS_TOP_HEADLINES_RESPONSE);
+    RTopHeadlinesResponse successResponse = service.getTopHeadlines(params);
+    assertAll("Success Top headlines news assertions",
+      () -> assertNotNull(successResponse, "The response can't be null"),
+      () -> assertNotNull(successResponse.articles(), "The articles can't be null"),
+      () -> assertEquals(2, successResponse.articles().size(), "The size of articles isn't correct"),
+      () -> assertEquals(SUCCESS_TOP_HEADLINES_RESPONSE.getArticles().getFirst(), successResponse.articles().getFirst(), "The first article isn't correct")
+    );
 
-    TopHeadlineResponse successResponse = service.getTopHeadlines(Map.of("country", "US"));
+    when(repositoryMock.getTopHeadlines(any())).thenThrow(new RuntimeException(EError.TESTING_MESSAGE.getMessage()));
+    assertThrows(CustomException.class, () -> service.getTopHeadlines(params));
 
-    validateCommonAssertions("Success Top headlines news assertions", successResponse);
-
-    verify(repositoryMock).getTopHeadlines(any());
+    verify(repositoryMock, times(2)).getTopHeadlines(any());
   }
 
   @Test
   void getSources() {
+    Map<String, String> params = Map.of("category", "business");
+
     when(repositoryMock.getSources(any())).thenReturn(SUCCESS_SOURCES_RESPONSE);
-
-    SourceResponse successResponse = service.getSources(Map.of("category","business"));
-
+    RSourcesResponse successResponse = service.getSources(params);
     assertAll("Success Sources assertions",
       () -> assertNotNull(successResponse, "The response can't be null"),
-      () -> assertNotNull(successResponse.getSources(), "The sources can't be null"),
-      () -> assertEquals(SUCCESS_STATUS_RESPONSE, successResponse.getStatus(), "The status isn't correct"),
-      () -> assertEquals(3, successResponse.getSources().size(), "The size of sources isn't correct")
+      () -> assertEquals(3, successResponse.sources().size(), "The size of sources isn't correct"),
+      () -> assertEquals(SUCCESS_SOURCES_RESPONSE.getSources().getFirst(), successResponse.sources().getFirst(), "The first source isn't correct")
     );
 
-//    when(repositoryMock.getSources(any())).thenThrow(new CustomException(HttpStatus.BAD_REQUEST, EError.TESTING_MESSAGE));
     when(repositoryMock.getSources(any())).thenThrow(new RuntimeException(EError.TESTING_MESSAGE.getMessage()));
-
-    SourceResponse errorResponse = service.getSources(Map.of("category","business"));
-
-    assertAll("Error Sources Assertions",
-      () -> assertNotNull(errorResponse, "The response can't be null"),
-      () -> assertNotNull(errorResponse.getSources(), "The sources must be null"),
-      () -> assertEquals(ERROR_STATUS_RESPONSE, errorResponse.getStatus(), "The status isn't correct"),
-      () -> assertEquals(EError.TESTING_MESSAGE.getMessage(), errorResponse.getMessage(), "This message isn't correct")
-    );
+    assertThrows(CustomException.class, () -> service.getSources(params));
 
     verify(repositoryMock, times(2)).getSources(any());
-  }
-
-  private void validateCommonAssertions(String heading, AbstractNewsResponse response) {
-    assertAll(heading,
-      () -> assertNotNull(response, "The response can't be null"),
-      () -> assertNotNull(response.getArticles(), "The articles can't be null"),
-      () -> assertEquals(SUCCESS_STATUS_RESPONSE, response.getStatus(), "The status isn't correct"),
-      () -> assertEquals(2, response.getArticles().size(), "The size of articles isn't correct")
-    );
   }
 }

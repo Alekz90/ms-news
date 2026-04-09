@@ -5,7 +5,7 @@ FROM eclipse-temurin:21-jdk-alpine-3.20
 WORKDIR /app
 # Copy the necesary files
 COPY build.gradle settings.gradle ./
-copy gradle ./gradle
+COPY gradle ./gradle
 # Download the dependencies
 RUN gradle build -x test --no-daemon || return 0
 # Copy the source

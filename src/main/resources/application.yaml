@@ -4,21 +4,6 @@ server:
 spring:
   application:
     name: ms-news
-  cloud:
-    circuitbreaker:
-      enabled: true
-      micrometer:
-        enabled: true
-      resilience4j:
-        instances:
-          news-instance:
-            slidingWindowSize: 10
-            failureRateThreshold: 50
-            waitDurationInOpenState: 30000
-            automaticTransitionFromOpenToHalfOpenEnabled: true
-            permittedNumberOfCallsInHalfOpenState: 5
-            allowHealthIndicatorToFail: true
-            registerHealthIndicator: true
   data:
     redis:
       host: ${REDIS_HOST}
@@ -34,6 +19,20 @@ spring:
       use-key-prefix: true
       cache-null-values: true
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # 'update' crea/actualiza tablas; usa 'none' en producción
+    show-sql: true     # Muestra las consultas SQL en la consola
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 springdoc:
   default-consumes-media-type: 'application/json'
   default-produces-media-type: 'application/json'
@@ -48,17 +47,15 @@ web-service-news:
     base-url: http://localhost:8081
     key: ${NEWS_API_KEY}
 
-resilience4j.circuitbreaker:
-  enabled: true
-  instances:
-    news-instance:
-      slidingWindowSize: 5
-      failureRateThreshold: 50
-      waitDurationInOpenState: 30000
-      automaticTransitionFromOpenToHalfOpenEnabled: true
-      permittedNumberOfCallsInHalfOpenState: 5
-      allowHealthIndicatorToFail: true
-      registerHealthIndicator: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      news-instance:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000ms
+        permittedNumberOfCallsInHalfOpenState: 3
 
 management:
   endpoints:
