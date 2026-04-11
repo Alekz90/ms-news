@@ -1,13 +1,13 @@
 package akz.news.web.service;
 
-import akz.news.remote.dto.EverythingResponse;
-import akz.news.remote.dto.SourceResponse;
-import akz.news.remote.dto.TopHeadlineResponse;
+import akz.news.web.dto.REverythingResponse;
+import akz.news.web.dto.RSourcesResponse;
+import akz.news.web.dto.RTopHeadlinesResponse;
 
 import java.util.Map;
 
 public interface INewsService {
-  EverythingResponse getEverything(Map<String, String> params);
-  TopHeadlineResponse getTopHeadlines(Map<String, String> params);
-  SourceResponse getSources(Map<String, String> params);
+  REverythingResponse getEverything(Map<String, String> params);
+  RTopHeadlinesResponse getTopHeadlines(Map<String, String> params);
+  RSourcesResponse getSources(Map<String, String> params);
 }

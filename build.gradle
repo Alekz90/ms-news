@@ -2,16 +2,22 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.3'
 	id 'io.spring.dependency-management' version '1.1.7'
+    id "org.sonarqube" version "7.2.3.7755"
+    id "jacoco"
 }
 
 group = 'akz'
 version = '0.0.1-SNAPSHOT'
-description = 'Test project for practicing software development'
+description = 'News project for portfolio'
 
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
+}
+
+jacoco {
+    toolVersion = "0.8.14"
 }
 
 configurations {
@@ -29,22 +35,29 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2'
 	implementation 'redis.clients:jedis:7.4.0'
+    implementation 'io.github.resilience4j:resilience4j-micrometer'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-data-redis-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'com.h2database:h2'
 }
 
 dependencyManagement {
@@ -53,6 +66,24 @@ dependencyManagement {
 	}
 }
 
+sonarqube {
+    properties {
+        property "sonar.projectKey", System.getenv('SONAR_KEY')
+        property "sonar.host.url", System.getenv('SONAR_HOST')
+        property "sonar.token", System.getenv('SONAR_TOKEN')
+    }
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
+
+tasks.jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+

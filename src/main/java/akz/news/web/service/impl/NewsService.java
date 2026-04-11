@@ -1,9 +1,11 @@
 package akz.news.web.service.impl;
 
 import akz.news.remote.dto.EverythingResponse;
-import akz.news.remote.dto.SourceResponse;
 import akz.news.remote.dto.TopHeadlineResponse;
 import akz.news.remote.service.NewsRtoService;
+import akz.news.web.dto.REverythingResponse;
+import akz.news.web.dto.RSourcesResponse;
+import akz.news.web.dto.RTopHeadlinesResponse;
 import akz.news.web.service.INewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,17 +19,19 @@ public class NewsService implements INewsService {
   private final NewsRtoService newsRtoService;
 
   @Override
-  public EverythingResponse getEverything(Map<String, String> params) {
-    return newsRtoService.getEverything(params);
+  public REverythingResponse getEverything(Map<String, String> params) {
+    EverythingResponse response = newsRtoService.getEverything(params);
+    return new REverythingResponse(response.getTotalResults(), response.getArticles());
   }
 
   @Override
-  public TopHeadlineResponse getTopHeadlines(Map<String, String> params) {
-    return newsRtoService.getTopHeadlines(params);
+  public RTopHeadlinesResponse getTopHeadlines(Map<String, String> params) {
+    TopHeadlineResponse response = newsRtoService.getTopHeadlines(params);
+    return new RTopHeadlinesResponse(response.getTotalResults(), response.getArticles());
   }
 
   @Override
-  public SourceResponse getSources(Map<String, String> params) {
-    return newsRtoService.getSources(params);
+  public RSourcesResponse getSources(Map<String, String> params) {
+    return new RSourcesResponse(newsRtoService.getSources(params).getSources());
   }
 }

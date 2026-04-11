@@ -1,22 +1,16 @@
 package akz.news.remote.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import akz.news.remote.dto.abstracts.AbstractNewsResponse;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.List;
 
-@Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class EverythingResponse implements Serializable {
-	protected int totalResults;
-	protected List<ArticlesItem> articles;
-	protected String status;
-  protected String message;
+public class EverythingResponse extends AbstractNewsResponse {
 
-  public static EverythingResponse error(String message) {
-    return new EverythingResponse(0, List.of(), "error", message);
+  @Builder
+  public EverythingResponse(int totalResults, List<ArticlesItem> articles, String status, String message) {
+    super(totalResults, articles, status, message);
   }
 }

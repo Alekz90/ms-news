@@ -1,86 +1,48 @@
 package akz.news.utils;
 
+import akz.news.exception.CustomException;
+import akz.news.utils.enums.EError;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Map;
 
 public final class Util {
 
-  public static Map<String, String> buildMapParameters(
-      String query, String searchIn, String sources, String domains, String excludeDomains,
-      String from, String to, String language, String sortBy, String pageSize, String page
-  ) {
+  private Util() {}
 
-    if (StringUtils.isBlank(query) && StringUtils.isBlank(searchIn)
-        && StringUtils.isBlank(sources) && StringUtils.isBlank(domains)) {
-      throw new IllegalArgumentException("At least one of the following parameters must be provided: query, sources, domains.");
+  public static void validateEverythingRequiredParameters(Map<String, String> params) {
+    if (StringUtils.isBlank(params.get("query")) && StringUtils.isBlank(params.get("searchIn"))
+        && StringUtils.isBlank(params.get("sources")) && StringUtils.isBlank(params.get("domains"))) {
+      throw new CustomException(HttpStatus.BAD_REQUEST, EError.REQUIRED_PARAM_EVERYTHING);
     }
-
-    Map<String, String> params = new HashMap<>();
-    if (StringUtils.isNotBlank(searchIn)) params.put("searchIn", searchIn);
-    if (StringUtils.isNotBlank(domains)) params.put("domains", domains);
-    if (StringUtils.isNotBlank(excludeDomains)) params.put("excludeDomains", excludeDomains);
-    if (StringUtils.isNotBlank(from)) params.put("from", from);
-    if (StringUtils.isNotBlank(to)) params.put("to", to);
-    if (StringUtils.isNotBlank(language)) params.put("language", language);
-    if (StringUtils.isNotBlank(sortBy)) params.put("sortBy", sortBy);
-
-    buildMapParameters(params, sources, query, pageSize, page);
-
-    return params;
   }
 
-  public static Map<String, String> buildMapParameters(
-      String country, String category, String sources, String query, String pageSize, String page
-  ) {
-
-    if (StringUtils.isBlank(country) && StringUtils.isBlank(category)
-        && StringUtils.isBlank(sources) && StringUtils.isBlank(query)) {
-      throw new IllegalArgumentException("At least one of the following parameters must be provided: country, category, sources, query.");
+  public static void validateTopHeadlinesRequiredParameters(Map<String, String> params) {
+    if (StringUtils.isBlank(params.get("country")) && StringUtils.isBlank(params.get("category"))
+        && StringUtils.isBlank(params.get("sources")) && StringUtils.isBlank(params.get("query"))) {
+      throw new CustomException(HttpStatus.BAD_REQUEST, EError.REQUIRED_PARAM_TOP_HEADLINE);
     }
-
-    Map<String, String> params = new HashMap<>();
-    if (StringUtils.isNotBlank(country)) params.put("country", country);
-    if (StringUtils.isNotBlank(category)) params.put("category", category);
-
-    buildMapParameters(params, sources, query, pageSize, page);
-
-    return params;
   }
 
-  public static Map<String, String> buildMapParameters(String country, String category, String language) {
-
-    Map<String, String> params = new HashMap<>();
-    if (StringUtils.isNotBlank(country)) params.put("country", country);
-    if (StringUtils.isNotBlank(category)) params.put("category", category);
-    if (StringUtils.isNotBlank(language)) params.put("language", language);
-
-    return params;
-  }
-
-  private static void buildMapParameters(
-      Map<String, String> params, String sources, String query, String pageSize, String page
-  ) {
-    if (StringUtils.isNotBlank(sources)) params.put("sources", sources);
-    if (StringUtils.isNotBlank(query)) params.put("query", query);
-    if (StringUtils.isNotBlank(pageSize)) params.put("pageSize", pageSize);
-    if (StringUtils.isNotBlank(page)) params.put("page", page);
+  public static void putMapParams(Map<String, String> params, String key, String value) {
+    if (StringUtils.isNotBlank(value)) {
+      params.put(key, value);
+    }
   }
 
   public static Duration getTimeToLive(String timeToLive) {
+    if (!timeToLive.matches(Constants.TIME_TO_LIVE_PATTERN)) {
+      throw new CustomException(HttpStatus.CONFLICT, EError.TIME_TO_LIVE_BAD_FORMAT);
+    }
     String durationType = timeToLive.substring(timeToLive.length() - 1);
     int time = Integer.parseInt(timeToLive.substring(0, timeToLive.length() - 1));
-    return switch (durationType) {
+    return switch (durationType.toLowerCase()) {
       case "d" -> Duration.ofDays(time);
       case "h" -> Duration.ofHours(time);
       case "m" -> Duration.ofMinutes(time);
       default -> Duration.ofSeconds(time);
     };
-  }
-
-  private Util() {
-    throw new UnsupportedOperationException("Utility class");
   }
 }

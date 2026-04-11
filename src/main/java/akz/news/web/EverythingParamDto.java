@@ -1,6 +1,5 @@
 package akz.news.web;
 
-import akz.news.utils.DocumentationConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

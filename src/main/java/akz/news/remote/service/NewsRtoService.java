@@ -1,5 +1,6 @@
 package akz.news.remote.service;
 
+import akz.news.exception.CustomException;
 import akz.news.remote.dto.EverythingResponse;
 import akz.news.remote.dto.SourceResponse;
 import akz.news.remote.dto.TopHeadlineResponse;
@@ -32,11 +33,21 @@ public class NewsRtoService {
     return repository.getEverything(EverythingParamDto.fromMap(params));
   }
 
+  EverythingResponse failGetEverything(Map<String, String> params, Throwable t) {
+    log.error("Failed to get everything with params: {}, error: {}", params.toString(), t.getMessage());
+    throw new CustomException(t.getMessage());
+  }
+
   @Cacheable(cacheNames = CACHING_TOP_HEADLINES, key = "T(String).join(\";\", #params.values())")
   @CircuitBreaker(name = NEWS_INSTANCE, fallbackMethod = "failGetTopHeadlines")
   public TopHeadlineResponse getTopHeadlines(Map<String, String> params) {
     log.info("Get Top Headlines news Key: {}", String.join(";", params.values()));
     return repository.getTopHeadlines(TopHeadlineParamDto.fromMap(params));
+  }
+
+  TopHeadlineResponse failGetTopHeadlines(Map<String, String> params, Throwable t) {
+    log.error("Failed to get top headlines with params: {}, error: {}", params.toString(), t.getMessage());
+    throw new CustomException(t.getMessage());
   }
 
   @Cacheable(cacheNames = CACHING_SOURCES, key = "T(String).join(\";\", #params.values())")
@@ -46,18 +57,8 @@ public class NewsRtoService {
     return repository.getSources(SourceParamDto.fromMap(params));
   }
 
-  private EverythingResponse failGetEverything(Map<String, String> params, Throwable ex) {
-    log.error("Failed to get everything with params: {}, error: {}", params.toString(), ex.getMessage());
-    return EverythingResponse.error(ex.getMessage());
-  }
-
-  private TopHeadlineResponse failGetTopHeadlines(Map<String, String> params, Throwable ex) {
-    log.error("Failed to get top headlines with params: {}, error: {}", params.toString(), ex.getMessage());
-    return TopHeadlineResponse.error(ex.getMessage());
-  }
-
-  private SourceResponse failGetSources(Map<String, String> params, Throwable ex) {
-    log.error("Failed to get sources with params: {}, error: {}", params.toString(), ex.getMessage());
-    return SourceResponse.error(ex.getMessage());
+  SourceResponse failGetSources(Map<String, String> params, Exception t) {
+    log.error("Failed to get sources with params: {}, error: {}", params.toString(), t.getMessage());
+    throw new CustomException(t.getMessage());
   }
 }
