@@ -20,6 +20,8 @@ WORKDIR /app
 # Copy the generated jar in the building
 COPY --from=build /app/build/libs/*.jar app.jar
 
+ENTRYPOINT ["java","-jar","app.jar"]
+
 # Move to the directory
 # cd C:/Projects/News/ms-news
 
