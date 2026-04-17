@@ -1,28 +1,21 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
 name: MS-NEWS CI building and testing
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "develop", "feature/testing"]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "develop" ]
   workflow_dispatch:
 
 jobs:
   build:
-  # Checkout source code
     name: Build job for ms-news
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
+    # Checkout source code
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -39,18 +32,19 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: '21'
-        distribution: 'temurin'  
+        distribution: 'temurin'
 
     # Run tests + JaCoCo + SonarQube
     # - name: Run Gradle tests and SonarQube
-    #    run: ./gradlew clean test --no-daemon
-    #    run: ./gradlew clean test jacocoTestReport sonarqube --no-daemon
+    #    run: gradle clean test --no-daemon
+    #    run: gradle clean test jacocoTestReport sonarqube --no-daemon
     #   env:
     #      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}    
+    #      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
+    # Build with gradle
     - name: Build with Gradle 9.0.0
-      run: ./gradlew build
+      run: gradle build
 
     
 
