@@ -58,7 +58,7 @@ class NewsServiceTest {
         successResponse.articles().getFirst(),
         "The first item of articles isn't correct"
       ), () -> assertEquals(
-        SUCCESS_EVERYTHING_RESPONSE.getArticles().getFirst(),
+        SUCCESS_EVERYTHING_RESPONSE.getArticles().getLast(),
         successResponse.articles().getLast(),
         "The first item of articles isn't correct"
       )

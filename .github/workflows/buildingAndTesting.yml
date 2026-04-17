@@ -2,9 +2,9 @@ name: MS-NEWS CI building and testing
 
 on:
   push:
-    branches: [ "develop", "feature/testing"]
+    branches: [ "master"]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
