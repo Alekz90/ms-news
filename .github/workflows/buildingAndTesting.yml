@@ -5,7 +5,7 @@ on:
     branches: [ "master"]
   pull_request:
     branches: [ "master" ]
-  workflow_dispatch:
+#  workflow_dispatch:
 
 jobs:
   tests:
@@ -45,7 +45,7 @@ jobs:
   build-image:
     name: Job to build image for MS-NEWS
     runs-on: self-hosted
-    needs: [ test ]
+    needs: [ tests ]
 
     steps:
 #    - # Checkout source code
