@@ -53,7 +53,15 @@ class NewsServiceTest {
       () -> assertNotNull(successResponse, "The response can't be null"),
       () -> assertNotNull(successResponse.articles(), "The articles can't be null"),
       () -> assertEquals(2, successResponse.articles().size(), "The first article isn't correct"),
-      () -> assertEquals(SUCCESS_EVERYTHING_RESPONSE.getArticles().getFirst(), successResponse.articles().getFirst(), "The size of articles isn't correct")
+      () -> assertEquals(
+        SUCCESS_EVERYTHING_RESPONSE.getArticles().getFirst(),
+        successResponse.articles().getFirst(),
+        "The first item of articles isn't correct"
+      ), () -> assertEquals(
+        SUCCESS_EVERYTHING_RESPONSE.getArticles().getLast(),
+        successResponse.articles().getLast(),
+        "The first item of articles isn't correct"
+      )
     );
 
     when(repositoryMock.getEverything(any())).thenThrow(new RuntimeException(EError.TESTING_MESSAGE.getMessage()));
