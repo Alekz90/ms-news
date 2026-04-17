@@ -44,8 +44,8 @@ jobs:
 
   build-image:
     name: Job to build image for MS-NEWS
-    runs-on: self-hosted
-    needs: [ test ]
+    runs-on: ubuntu-latest
+    needs: [ tests ]
 
     steps:
 #    - # Checkout source code
